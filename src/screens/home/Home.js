@@ -17,6 +17,36 @@ import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Home.css';
 
+const styles = (theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    flexGrow: 1,
+  },
+  upcomingMoviesHeading: {
+    background: '#ff9999',
+    padding: '8px',
+    textAlign: 'center',
+    fontSize: '1rem',
+  },
+  upcomingMoviesListGird: {
+    width: '100%',
+    flexWrap: 'nowrap',
+    transform: 'translateZ(0)',
+  },
+  mainList: {
+    cursor: 'pointer',
+    transform: 'translateZ(0)',
+  },
+  FormControl: {
+    minWidth: 240,
+    maxWidth: 240,
+    margin: theme.spacing.unit,
+  },
+  title: {
+    color: theme.palette.primary.light,
+  },
+});
+
 class Home extends Component {
   constructor() {
     super();
