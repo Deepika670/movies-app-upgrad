@@ -7,11 +7,20 @@
 .movies-app-logo {
   height: 35px;
   background: #ff7f7f;
-  animation: logo-rotate infinite 8s linear;
+  animation: rotate-logo infinite 8s linear;
 }
 
-@keyframes logo-rotate {
+@keyframes rotate-logo {
   from {
     transform: scaleX(-1);
   }
+}
+
+.login-logout-button {
+  float: right;
+}
+
+.book-show-button {
+  float: right;
+  margin-right: 15px;
 }
