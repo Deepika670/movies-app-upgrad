@@ -3,3 +3,15 @@
   height: 36px;
   padding: 8px 32px 8px 16px;
 }
+
+.movies-app-logo {
+  height: 35px;
+  background: #ff7f7f;
+  animation: logo-rotate infinite 8s linear;
+}
+
+@keyframes logo-rotate {
+  from {
+    transform: scaleX(-1);
+  }
+}
