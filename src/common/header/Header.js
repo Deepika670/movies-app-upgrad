@@ -11,6 +11,8 @@ class Header extends Component {
     this.state = {
       showModal: false,
       value: 0,
+      usernameRequired: '',
+      username: '',
       registrationSuccessful: false,
       isLoggedIn:
         sessionStorage.getItem('access-token') === null ? false : true,
@@ -30,6 +32,10 @@ class Header extends Component {
     this.setState({
       isLoggedIn: false,
     });
+  };
+
+  onClickBookShowButton = () => {
+    alert('Book show button');
   };
 
   render() {
@@ -65,6 +71,7 @@ class Header extends Component {
           <Button
             variant='contained'
             color='primary'
+            onClick={this.onClickBookShowButton}
           >
             Book Show
           </Button>
