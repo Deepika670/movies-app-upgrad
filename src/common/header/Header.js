@@ -59,13 +59,17 @@ class Header extends Component {
       lastname: '',
       lastnameRequired: 'hide',
 
-      emailRequired: 'hide',
       email: '',
-      registerPasswordRequired: 'hide',
+      emailRequired: 'hide',
+
       registerPassword: '',
-      contactRequired: 'hide',
+      registerPasswordRequired: 'hide',
+
       contact: '',
+      contactRequired: 'hide',
+
       registrationSuccess: false,
+
       isLoggedIn: sessionStorage.getItem('access-token') == null ? false : true,
     };
   }
@@ -111,13 +115,15 @@ class Header extends Component {
     this.state.username === ''
       ? this.setState({ usernameRequired: 'show' })
       : this.setState({ usernameRequired: 'hide' });
+
     this.state.loginPassword === ''
       ? this.setState({ loginPasswordRequired: 'show' })
       : this.setState({ loginPasswordRequired: 'hide' });
 
-    let dataLogin = null;
+    let loginData = null;
     let xhrLogin = new XMLHttpRequest();
     let currentState = this;
+
     xhrLogin.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
         sessionStorage.setItem('uuid', JSON.parse(this.responseText).id);
@@ -140,9 +146,11 @@ class Header extends Component {
       'Basic ' +
         window.btoa(this.state.username + ':' + this.state.loginPassword)
     );
+
     xhrLogin.setRequestHeader('Content-Type', 'application/json');
     xhrLogin.setRequestHeader('Cache-Control', 'no-cache');
-    xhrLogin.send(dataLogin);
+
+    xhrLogin.send(loginData);
   };
 
   inputUsernameChangeHandler = (event) => {
@@ -177,9 +185,9 @@ class Header extends Component {
     let userRegistrationData = JSON.stringify({
       first_name: this.state.firstname,
       last_name: this.state.lastname,
-      mobile_number: this.state.contact,
       email_address: this.state.email,
       password: this.state.registerPassword,
+      mobile_number: this.state.contact,
     });
 
     let xhrSignup = new XMLHttpRequest();
@@ -306,7 +314,7 @@ class Header extends Component {
             <Tab label='Register' />
           </Tabs>
 
-          {this.state.value === 0 && (
+          {this.state.tabValue === 0 && (
             <TabContainer>
               <FormControl required>
                 <InputLabel htmlFor='username'>Username</InputLabel>
@@ -355,7 +363,7 @@ class Header extends Component {
             </TabContainer>
           )}
 
-          {this.state.value === 1 && (
+          {this.state.tabValue === 1 && (
             <TabContainer>
               <FormControl required>
                 <InputLabel htmlFor='firstname'>First Name</InputLabel>
