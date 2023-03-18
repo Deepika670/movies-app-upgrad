@@ -24,3 +24,19 @@
   float: right;
   margin-right: 15px;
 }
+
+.error-message {
+  color: red;
+}
+
+.tabs-container {
+  margin-bottom: 20px;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
