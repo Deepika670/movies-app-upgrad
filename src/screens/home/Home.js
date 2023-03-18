@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
-import './Home.css';
-import Header from '../../common/header/Header';
 import { withStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Checkbox from '@material-ui/core/Checkbox';
+import Card from '@material-ui/core/Card';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+import Header from '../../common/header/Header';
+
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+
+import './Home.css';
 
 const styles = (theme) => ({
   root: {
@@ -29,19 +32,19 @@ const styles = (theme) => ({
     textAlign: 'center',
     fontSize: '1rem',
   },
-  gridListUpcomingMovies: {
+  upComingMoviesListGrid: {
     width: '100%',
     transform: 'translateZ(0)',
     flexWrap: 'nowrap',
   },
-  gridListMain: {
+  mainList: {
     cursor: 'pointer',
     transform: 'translateZ(0)',
   },
   formControl: {
-    margin: theme.spacing.unit,
     minWidth: 240,
     maxWidth: 240,
+    margin: theme.spacing.unit,
   },
   title: {
     color: theme.palette.primary.light,
@@ -55,23 +58,25 @@ class Home extends Component {
       movieName: '',
       upcomingMovies: [],
       releasedMovies: [],
-      genres: [],
-      artists: [],
-      genresList: [],
-      artistsList: [],
       releaseDateStart: '',
       releaseDateEnd: '',
+      genres: [],
+      genresList: [],
+      artists: [],
+      artistsList: [],
     };
   }
 
   componentWillMount() {
-    // Get upcoming movies
+    //fetch upcoming movies from database
+
     let data = null;
     let xhr = new XMLHttpRequest();
-    let that = this;
+    let currentState = this;
+
     xhr.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           upcomingMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -81,12 +86,13 @@ class Home extends Component {
     xhr.setRequestHeader('Cache-Control', 'no-cache');
     xhr.send(data);
 
-    // Get released movies
+    // fetch released movies from database
     let dataReleased = null;
     let xhrReleased = new XMLHttpRequest();
+
     xhrReleased.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           releasedMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -96,12 +102,13 @@ class Home extends Component {
     xhrReleased.setRequestHeader('Cache-Control', 'no-cache');
     xhrReleased.send(dataReleased);
 
-    // Get filters
+    // fetch filters from database
     let dataGenres = null;
     let xhrGenres = new XMLHttpRequest();
+
     xhrGenres.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           genresList: JSON.parse(this.responseText).genres,
         });
       }
@@ -111,12 +118,13 @@ class Home extends Component {
     xhrGenres.setRequestHeader('Cache-Control', 'no-cache');
     xhrGenres.send(dataGenres);
 
-    // Get artists
+    // fetch artists from database
     let dataArtists = null;
     let xhrArtists = new XMLHttpRequest();
+
     xhrArtists.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           artistsList: JSON.parse(this.responseText).artists,
         });
       }
@@ -169,12 +177,12 @@ class Home extends Component {
       queryString += '&end_date=' + this.state.releaseDateEnd;
     }
 
-    let that = this;
+    let currentState = this;
     let dataFilter = null;
     let xhrFilter = new XMLHttpRequest();
     xhrFilter.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           releasedMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -200,7 +208,7 @@ class Home extends Component {
 
         <GridList
           cols={5}
-          className={classes.gridListUpcomingMovies}
+          className={classes.upComingMoviesListGrid}
         >
           {this.state.upcomingMovies.map((movie) => (
             <GridListTile key={'upcoming' + movie.id}>
@@ -219,7 +227,7 @@ class Home extends Component {
             <GridList
               cellHeight={350}
               cols={4}
-              className={classes.gridListMain}
+              className={classes.mainList}
             >
               {this.state.releasedMovies.map((movie) => (
                 <GridListTile
@@ -276,15 +284,17 @@ class Home extends Component {
                     value={this.state.genres}
                     onChange={this.genreSelectHandler}
                   >
-                    {this.state.genresList.map((genre) => (
+                    {this.state.genresList.map((eachGenre) => (
                       <MenuItem
-                        key={genre.id}
-                        value={genre.genre}
+                        key={eachGenre.id}
+                        value={eachGenre.genre}
                       >
                         <Checkbox
-                          checked={this.state.genres.indexOf(genre.genre) > -1}
+                          checked={
+                            this.state.genres.indexOf(eachGenre.genre) > -1
+                          }
                         />
-                        <ListItemText primary={genre.genre} />
+                        <ListItemText primary={eachGenre.genre} />
                       </MenuItem>
                     ))}
                   </Select>
@@ -301,20 +311,24 @@ class Home extends Component {
                     value={this.state.artists}
                     onChange={this.artistSelectHandler}
                   >
-                    {this.state.artistsList.map((artist) => (
+                    {this.state.artistsList.map((eachArtist) => (
                       <MenuItem
-                        key={artist.id}
-                        value={artist.first_name + ' ' + artist.last_name}
+                        key={eachArtist.id}
+                        value={
+                          eachArtist.first_name + ' ' + eachArtist.last_name
+                        }
                       >
                         <Checkbox
                           checked={
                             this.state.artists.indexOf(
-                              artist.first_name + ' ' + artist.last_name
+                              eachArtist.first_name + ' ' + eachArtist.last_name
                             ) > -1
                           }
                         />
                         <ListItemText
-                          primary={artist.first_name + ' ' + artist.last_name}
+                          primary={
+                            eachArtist.first_name + ' ' + eachArtist.last_name
+                          }
                         />
                       </MenuItem>
                     ))}
@@ -326,7 +340,7 @@ class Home extends Component {
                     id='releaseDateStart'
                     label='Release Date Start'
                     type='date'
-                    defaultValue=''
+                    defaultValue={''}
                     InputLabelProps={{ shrink: true }}
                     onChange={this.releaseDateStartHandler}
                   />
@@ -337,7 +351,7 @@ class Home extends Component {
                     id='releaseDateEnd'
                     label='Release Date End'
                     type='date'
-                    defaultValue=''
+                    defaultValue={''}
                     InputLabelProps={{ shrink: true }}
                     onChange={this.releaseDateEndHandler}
                   />
