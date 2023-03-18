@@ -135,23 +135,23 @@ class Home extends Component {
     xhrArtists.send(dataArtists);
   }
 
-  movieNameChangeHandler = (event) => {
+  onChangeMovieName = (event) => {
     this.setState({ movieName: event.target.value });
   };
 
-  genreSelectHandler = (event) => {
+  onChangeGenre = (event) => {
     this.setState({ genres: event.target.value });
   };
 
-  artistSelectHandler = (event) => {
+  onChangeArtist = (event) => {
     this.setState({ artists: event.target.value });
   };
 
-  releaseDateStartHandler = (event) => {
+  onChangeReleaseStartDate = (event) => {
     this.setState({ releaseDateStart: event.target.value });
   };
 
-  releaseDateEndHandler = (event) => {
+  onChangeReleaseEndDate = (event) => {
     this.setState({ releaseDateEnd: event.target.value });
   };
 
@@ -159,7 +159,7 @@ class Home extends Component {
     this.props.history.push('/movie/' + movieId);
   };
 
-  filterApplyHandler = () => {
+  onClickApplyFilter = () => {
     let queryString = '?status=RELEASED';
     if (this.state.movieName !== '') {
       queryString += '&title=' + this.state.movieName;
@@ -223,7 +223,7 @@ class Home extends Component {
         </GridList>
 
         <div className='flex-container'>
-          <div className='left'>
+          <div className='left-container'>
             <GridList
               cellHeight={350}
               cols={4}
@@ -232,7 +232,7 @@ class Home extends Component {
               {this.state.releasedMovies.map((movie) => (
                 <GridListTile
                   onClick={() => this.movieClickHandler(movie.id)}
-                  className='released-movie-grid-item'
+                  className='released-movie'
                   key={'grid' + movie.id}
                 >
                   <img
@@ -253,7 +253,7 @@ class Home extends Component {
               ))}
             </GridList>
           </div>
-          <div className='right'>
+          <div className='right-container'>
             <Card>
               <CardContent>
                 <FormControl className={classes.formControl}>
@@ -269,7 +269,7 @@ class Home extends Component {
                   <InputLabel htmlFor='movieName'>Movie Name</InputLabel>
                   <Input
                     id='movieName'
-                    onChange={this.movieNameChangeHandler}
+                    onChange={this.onChangeMovieName}
                   />
                 </FormControl>
 
@@ -282,7 +282,7 @@ class Home extends Component {
                     input={<Input id='select-multiple-checkbox-genre' />}
                     renderValue={(selected) => selected.join(',')}
                     value={this.state.genres}
-                    onChange={this.genreSelectHandler}
+                    onChange={this.onChangeGenre}
                   >
                     {this.state.genresList.map((eachGenre) => (
                       <MenuItem
@@ -309,7 +309,7 @@ class Home extends Component {
                     input={<Input id='select-multiple-checkbox' />}
                     renderValue={(selected) => selected.join(',')}
                     value={this.state.artists}
-                    onChange={this.artistSelectHandler}
+                    onChange={this.onChangeArtist}
                   >
                     {this.state.artistsList.map((eachArtist) => (
                       <MenuItem
@@ -342,7 +342,7 @@ class Home extends Component {
                     type='date'
                     defaultValue={''}
                     InputLabelProps={{ shrink: true }}
-                    onChange={this.releaseDateStartHandler}
+                    onChange={this.onChangeReleaseStartDate}
                   />
                 </FormControl>
 
@@ -353,14 +353,14 @@ class Home extends Component {
                     type='date'
                     defaultValue={''}
                     InputLabelProps={{ shrink: true }}
-                    onChange={this.releaseDateEndHandler}
+                    onChange={this.onChangeReleaseEndDate}
                   />
                 </FormControl>
                 <br />
                 <br />
                 <FormControl className={classes.formControl}>
                   <Button
-                    onClick={() => this.filterApplyHandler()}
+                    onClick={() => this.onClickApplyFilter()}
                     variant='contained'
                     color='primary'
                   >
