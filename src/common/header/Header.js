@@ -101,15 +101,13 @@ class Header extends Component {
     this.state.username === ''
       ? this.setState({ usernameRequired: 'dispBlock' })
       : this.setState({ usernameRequired: 'dispNone' });
-
     this.state.loginPassword === ''
       ? this.setState({ loginPasswordRequired: 'dispBlock' })
       : this.setState({ loginPasswordRequired: 'dispNone' });
 
     let loginData = null;
     let xhrLogin = new XMLHttpRequest();
-    let that = this;
-
+    let currentState = this;
     xhrLogin.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
         sessionStorage.setItem('uuid', JSON.parse(this.responseText).id);
@@ -118,11 +116,11 @@ class Header extends Component {
           xhrLogin.getResponseHeader('access-token')
         );
 
-        that.setState({
-          isLoggedIn: true,
+        currentState.setState({
+          loggedIn: true,
         });
 
-        that.onCloseModal();
+        currentState.closeModalHandler();
       }
     });
 
@@ -132,6 +130,9 @@ class Header extends Component {
       'Basic ' +
         window.btoa(this.state.username + ':' + this.state.loginPassword)
     );
+    xhrLogin.setRequestHeader('Content-Type', 'application/json');
+    xhrLogin.setRequestHeader('Cache-Control', 'no-cache');
+    xhrLogin.send(loginData);
   };
 
   render() {

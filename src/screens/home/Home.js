@@ -63,6 +63,64 @@ class Home extends Component {
     };
   }
 
+  componentWillMount() {
+    let data = null;
+    let xhr = new XMLHttpRequest();
+    let currentState = this;
+    xhr.addEventListener('readystatechange', function () {
+      if (this.readyState === 4) {
+        currentState.setState({
+          upcomingMovies: JSON.parse(this.responseText).movies,
+        });
+      }
+    });
+
+    xhr.open('GET', this.props.baseUrl + 'movies?status=PUBLISHED');
+    xhr.setRequestHeader('Cache-Control', 'no-cache');
+
+    let dataReleased = null;
+    let xhrReleased = new XMLHttpRequest();
+    xhrReleased.addEventListener('readystatechange', function () {
+      if (this.readyState === 4) {
+        currentState.setState({
+          releasedMovies: JSON.parse(this.responseText).movies,
+        });
+      }
+    });
+
+    xhrReleased.open('GET', this.props.baseUrl + 'movies?status=RELEASED');
+    xhrReleased.setRequestHeader('Cache-Control', 'no-cache');
+    xhrReleased.send(dataReleased);
+
+    let dataGenres = null;
+    let xhrGenres = new XMLHttpRequest();
+    xhrGenres.addEventListener('readystatechange', function () {
+      if (this.readyState === 4) {
+        currentState.setState({
+          genresList: JSON.parse(this.responseText).genres,
+        });
+      }
+    });
+
+    xhrGenres.open('GET', this.props.baseUrl + 'genres');
+    xhrGenres.setRequestHeader('Cache-Control', 'no-cache');
+    xhrGenres.send(dataGenres);
+
+    let dataArtists = null;
+    let xhrArtists = new XMLHttpRequest();
+    xhrArtists.addEventListener('readystatechange', function () {
+      if (this.readyState === 4) {
+        currentState.setState({
+          artistsList: JSON.parse(this.responseText).artists,
+        });
+      }
+    });
+
+    xhrArtists.open('GET', this.props.baseUrl + 'artists');
+    xhrArtists.setRequestHeader('Cache-Control', 'no-cache');
+    xhrArtists.send(dataArtists);
+  }
+
   render() {
     return (
       <div>
