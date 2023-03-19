@@ -78,29 +78,6 @@ class Header extends Component {
   handleOpenModal = () => {
     this.setState({
       showModal: true,
-
-      tabValue: 0,
-
-      username: '',
-      usernameRequired: 'hide',
-
-      loginPassword: '',
-      loginPasswordRequired: 'hide',
-
-      firstname: '',
-      firstnameRequired: 'hide',
-
-      lastname: '',
-      lastnameRequired: 'hide',
-
-      email: '',
-      emailRequired: 'hide',
-
-      registerPassword: '',
-      registerPasswordRequired: 'hide',
-
-      contact: '',
-      contactRequired: 'hide',
     });
   };
 
@@ -183,31 +160,41 @@ class Header extends Component {
       ? this.setState({ contactRequired: 'show' })
       : this.setState({ contactRequired: 'hide' });
 
-    let userRegistrationData = JSON.stringify({
-      first_name: this.state.firstname,
-      last_name: this.state.lastname,
-      email_address: this.state.email,
-      password: this.state.registerPassword,
-      mobile_number: this.state.contact,
-    });
+    if (
+      this.state.firstname === '' ||
+      this.state.lastname === '' ||
+      this.state.email === '' ||
+      this.state.registerPassword === '' ||
+      this.state.contact === ''
+    ) {
+      return null;
+    } else {
+      let userRegistrationData = JSON.stringify({
+        first_name: this.state.firstname,
+        last_name: this.state.lastname,
+        email_address: this.state.email,
+        password: this.state.registerPassword,
+        mobile_number: this.state.contact,
+      });
 
-    let xhrSignup = new XMLHttpRequest();
-    let currentState = this;
+      let xhrSignup = new XMLHttpRequest();
+      let currentState = this;
 
-    xhrSignup.addEventListener('readystatechange', function () {
-      if (this.readyState === 4) {
-        currentState.setState({
-          registrationSuccess: true,
-        });
-      }
-    });
+      xhrSignup.addEventListener('readystatechange', function () {
+        if (this.readyState === 4) {
+          currentState.setState({
+            registrationSuccess: true,
+          });
+        }
+      });
 
-    xhrSignup.open('POST', this.props.baseUrl + 'signup');
+      xhrSignup.open('POST', this.props.baseUrl + 'signup');
 
-    xhrSignup.setRequestHeader('Content-Type', 'application/json');
-    xhrSignup.setRequestHeader('Cache-Control', 'no-cache');
+      xhrSignup.setRequestHeader('Content-Type', 'application/json');
+      xhrSignup.setRequestHeader('Cache-Control', 'no-cache');
 
-    xhrSignup.send(userRegistrationData);
+      xhrSignup.send(userRegistrationData);
+    }
   };
 
   onChangeFirstName = (event) => {
