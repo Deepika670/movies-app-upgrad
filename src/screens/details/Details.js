@@ -105,6 +105,24 @@ class Details extends Component {
               </Typography>
             </div>
           </div>
+
+          <div className='rating-movie-artists-container'>
+            <Typography>
+              <span>Rate this movie: </span>
+            </Typography>
+
+            <div>
+              <Typography>
+                <span>Artists:</span>
+              </Typography>
+            </div>
+            <div>
+              <GridList
+                cellHeight={160}
+                cols={2}
+              ></GridList>
+            </div>
+          </div>
         </section>
       </div>
     );
