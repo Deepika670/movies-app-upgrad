@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import React, { Component } from 'react';
 
 class Details extends Component {
@@ -41,7 +42,72 @@ class Details extends Component {
   }
 
   render() {
-    return <div>Details</div>;
+    return (
+      <div className='movie-details'>
+        <Header />
+        <div className='back-to-home'>
+          <Typography>
+            <Link to='/'> &#60; Back to Home</Link>
+          </Typography>
+        </div>
+        <section className='movie-full-details-section'>
+          <div className='movie-poster-section'>
+            <img
+              src={''}
+              alt={''}
+            />
+          </div>
+
+          <div className='movie-full-details'>
+            <div>
+              <Typography
+                variant='headline'
+                component='h2'
+              ></Typography>
+            </div>
+
+            <br />
+            <br />
+
+            <div>
+              <Typography>
+                <span>Genres: </span>
+              </Typography>
+            </div>
+
+            <div>
+              <Typography>
+                <span>Duration: </span>
+              </Typography>
+            </div>
+
+            <div>
+              <Typography>
+                <span>Release Date: </span>
+              </Typography>
+            </div>
+
+            <div>
+              <Typography>
+                <span>Rating: </span>
+              </Typography>
+            </div>
+
+            <div>
+              <Typography>
+                <span>Plot:</span>
+              </Typography>
+            </div>
+
+            <div>
+              <Typography>
+                <span>Trailer:</span>
+              </Typography>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
   }
 }
 
