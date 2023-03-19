@@ -1,50 +1,47 @@
 import React, { Component } from 'react';
+import './Home.css';
+import Header from '../../common/header/Header';
 import { withStyles } from '@material-ui/core/styles';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import FormControl from '@material-ui/core/FormControl';
+import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Card from '@material-ui/core/Card';
+import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-
-import Header from '../../common/header/Header';
-
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-
-import './Home.css';
 
 const styles = (theme) => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
   },
   upcomingMoviesHeading: {
+    textAlign: 'center',
     background: '#ff9999',
     padding: '8px',
-    textAlign: 'center',
     fontSize: '1rem',
   },
-  upComingMoviesListGrid: {
-    width: '100%',
-    transform: 'translateZ(0)',
+  gridListUpcomingMovies: {
     flexWrap: 'nowrap',
-  },
-  mainList: {
-    cursor: 'pointer',
     transform: 'translateZ(0)',
+    width: '100%',
+  },
+  gridListMain: {
+    transform: 'translateZ(0)',
+    cursor: 'pointer',
   },
   formControl: {
+    margin: theme.spacing.unit,
     minWidth: 240,
     maxWidth: 240,
-    margin: theme.spacing.unit,
   },
   title: {
     color: theme.palette.primary.light,
@@ -58,25 +55,23 @@ class Home extends Component {
       movieName: '',
       upcomingMovies: [],
       releasedMovies: [],
+      genres: [],
+      artists: [],
+      genresList: [],
+      artistsList: [],
       releaseDateStart: '',
       releaseDateEnd: '',
-      genres: [],
-      genresList: [],
-      artists: [],
-      artistsList: [],
     };
   }
 
   componentWillMount() {
-    //fetch upcoming movies from database
-
+    // Get upcoming movies
     let data = null;
     let xhr = new XMLHttpRequest();
-    let currentState = this;
-
+    let that = this;
     xhr.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        currentState.setState({
+        that.setState({
           upcomingMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -86,13 +81,12 @@ class Home extends Component {
     xhr.setRequestHeader('Cache-Control', 'no-cache');
     xhr.send(data);
 
-    // fetch released movies from database
+    // Get released movies
     let dataReleased = null;
     let xhrReleased = new XMLHttpRequest();
-
     xhrReleased.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        currentState.setState({
+        that.setState({
           releasedMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -102,13 +96,12 @@ class Home extends Component {
     xhrReleased.setRequestHeader('Cache-Control', 'no-cache');
     xhrReleased.send(dataReleased);
 
-    // fetch filters from database
+    // Get filters
     let dataGenres = null;
     let xhrGenres = new XMLHttpRequest();
-
     xhrGenres.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        currentState.setState({
+        that.setState({
           genresList: JSON.parse(this.responseText).genres,
         });
       }
@@ -118,13 +111,12 @@ class Home extends Component {
     xhrGenres.setRequestHeader('Cache-Control', 'no-cache');
     xhrGenres.send(dataGenres);
 
-    // fetch artists from database
+    // Get artists
     let dataArtists = null;
     let xhrArtists = new XMLHttpRequest();
-
     xhrArtists.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        currentState.setState({
+        that.setState({
           artistsList: JSON.parse(this.responseText).artists,
         });
       }
@@ -135,23 +127,23 @@ class Home extends Component {
     xhrArtists.send(dataArtists);
   }
 
-  onChangeMovieName = (event) => {
+  movieNameChangeHandler = (event) => {
     this.setState({ movieName: event.target.value });
   };
 
-  onChangeGenre = (event) => {
+  genreSelectHandler = (event) => {
     this.setState({ genres: event.target.value });
   };
 
-  onChangeArtist = (event) => {
+  artistSelectHandler = (event) => {
     this.setState({ artists: event.target.value });
   };
 
-  onChangeReleaseStartDate = (event) => {
+  releaseDateStartHandler = (event) => {
     this.setState({ releaseDateStart: event.target.value });
   };
 
-  onChangeReleaseEndDate = (event) => {
+  releaseDateEndHandler = (event) => {
     this.setState({ releaseDateEnd: event.target.value });
   };
 
@@ -159,7 +151,7 @@ class Home extends Component {
     this.props.history.push('/movie/' + movieId);
   };
 
-  onClickApplyFilter = () => {
+  filterApplyHandler = () => {
     let queryString = '?status=RELEASED';
     if (this.state.movieName !== '') {
       queryString += '&title=' + this.state.movieName;
@@ -177,12 +169,12 @@ class Home extends Component {
       queryString += '&end_date=' + this.state.releaseDateEnd;
     }
 
-    let currentState = this;
+    let that = this;
     let dataFilter = null;
     let xhrFilter = new XMLHttpRequest();
     xhrFilter.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        currentState.setState({
+        that.setState({
           releasedMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -208,7 +200,7 @@ class Home extends Component {
 
         <GridList
           cols={5}
-          className={classes.upComingMoviesListGrid}
+          className={classes.gridListUpcomingMovies}
         >
           {this.state.upcomingMovies.map((movie) => (
             <GridListTile key={'upcoming' + movie.id}>
@@ -223,16 +215,16 @@ class Home extends Component {
         </GridList>
 
         <div className='flex-container'>
-          <div className='left-container'>
+          <div className='left'>
             <GridList
               cellHeight={350}
               cols={4}
-              className={classes.mainList}
+              className={classes.gridListMain}
             >
               {this.state.releasedMovies.map((movie) => (
                 <GridListTile
                   onClick={() => this.movieClickHandler(movie.id)}
-                  className='released-movie'
+                  className='released-movie-grid-item'
                   key={'grid' + movie.id}
                 >
                   <img
@@ -253,7 +245,7 @@ class Home extends Component {
               ))}
             </GridList>
           </div>
-          <div className='right-container'>
+          <div className='right'>
             <Card>
               <CardContent>
                 <FormControl className={classes.formControl}>
@@ -269,7 +261,7 @@ class Home extends Component {
                   <InputLabel htmlFor='movieName'>Movie Name</InputLabel>
                   <Input
                     id='movieName'
-                    onChange={this.onChangeMovieName}
+                    onChange={this.movieNameChangeHandler}
                   />
                 </FormControl>
 
@@ -282,19 +274,17 @@ class Home extends Component {
                     input={<Input id='select-multiple-checkbox-genre' />}
                     renderValue={(selected) => selected.join(',')}
                     value={this.state.genres}
-                    onChange={this.onChangeGenre}
+                    onChange={this.genreSelectHandler}
                   >
-                    {this.state.genresList.map((eachGenre) => (
+                    {this.state.genresList.map((genre) => (
                       <MenuItem
-                        key={eachGenre.id}
-                        value={eachGenre.genre}
+                        key={genre.id}
+                        value={genre.genre}
                       >
                         <Checkbox
-                          checked={
-                            this.state.genres.indexOf(eachGenre.genre) > -1
-                          }
+                          checked={this.state.genres.indexOf(genre.genre) > -1}
                         />
-                        <ListItemText primary={eachGenre.genre} />
+                        <ListItemText primary={genre.genre} />
                       </MenuItem>
                     ))}
                   </Select>
@@ -309,26 +299,22 @@ class Home extends Component {
                     input={<Input id='select-multiple-checkbox' />}
                     renderValue={(selected) => selected.join(',')}
                     value={this.state.artists}
-                    onChange={this.onChangeArtist}
+                    onChange={this.artistSelectHandler}
                   >
-                    {this.state.artistsList.map((eachArtist) => (
+                    {this.state.artistsList.map((artist) => (
                       <MenuItem
-                        key={eachArtist.id}
-                        value={
-                          eachArtist.first_name + ' ' + eachArtist.last_name
-                        }
+                        key={artist.id}
+                        value={artist.first_name + ' ' + artist.last_name}
                       >
                         <Checkbox
                           checked={
                             this.state.artists.indexOf(
-                              eachArtist.first_name + ' ' + eachArtist.last_name
+                              artist.first_name + ' ' + artist.last_name
                             ) > -1
                           }
                         />
                         <ListItemText
-                          primary={
-                            eachArtist.first_name + ' ' + eachArtist.last_name
-                          }
+                          primary={artist.first_name + ' ' + artist.last_name}
                         />
                       </MenuItem>
                     ))}
@@ -340,9 +326,9 @@ class Home extends Component {
                     id='releaseDateStart'
                     label='Release Date Start'
                     type='date'
-                    defaultValue={''}
+                    defaultValue=''
                     InputLabelProps={{ shrink: true }}
-                    onChange={this.onChangeReleaseStartDate}
+                    onChange={this.releaseDateStartHandler}
                   />
                 </FormControl>
 
@@ -351,16 +337,16 @@ class Home extends Component {
                     id='releaseDateEnd'
                     label='Release Date End'
                     type='date'
-                    defaultValue={''}
+                    defaultValue=''
                     InputLabelProps={{ shrink: true }}
-                    onChange={this.onChangeReleaseEndDate}
+                    onChange={this.releaseDateEndHandler}
                   />
                 </FormControl>
                 <br />
                 <br />
                 <FormControl className={classes.formControl}>
                   <Button
-                    onClick={() => this.onClickApplyFilter()}
+                    onClick={() => this.filterApplyHandler()}
                     variant='contained'
                     color='primary'
                   >
