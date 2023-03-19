@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import Header from '../../common/header/Header';
 import Typography from '@material-ui/core/Typography';
+import './Details.css';
+import YouTube from 'react-youtube';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import Header from '../../common/header/Header';
-import YouTube from 'react-youtube';
+import { Link } from 'react-router-dom';
 
-import './Details.css';
 class Details extends Component {
   constructor() {
     super();
@@ -49,13 +49,12 @@ class Details extends Component {
   }
 
   componentWillMount() {
-    let currentState = this;
-    let movieData = null;
+    let that = this;
+    let dataMovie = null;
     let xhrMovie = new XMLHttpRequest();
-
     xhrMovie.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        currentState.setState({
+        that.setState({
           movie: JSON.parse(this.responseText),
         });
       }
@@ -66,48 +65,44 @@ class Details extends Component {
       this.props.baseUrl + 'movies/' + this.props.match.params.id
     );
     xhrMovie.setRequestHeader('Cache-Control', 'no-cache');
-    xhrMovie.send(movieData);
+    xhrMovie.send(dataMovie);
   }
 
-  onClickArtist = (url) => {
+  artistClickHandler = (url) => {
     window.location = url;
   };
 
-  onClickStars = (id) => {
+  starClickHandler = (id) => {
     let starIconList = [];
-
     for (let star of this.state.starIcons) {
-      let ratingStar = star;
-
+      let starNode = star;
       if (star.id <= id) {
-        ratingStar.color = 'yellow';
+        starNode.color = 'yellow';
       } else {
-        ratingStar.color = 'black';
+        starNode.color = 'black';
       }
-      starIconList.push(ratingStar);
+      starIconList.push(starNode);
     }
     this.setState({ starIcons: starIconList });
   };
 
   render() {
-    const options = {
+    let movie = this.state.movie;
+    const opts = {
       height: '300',
       width: '700',
       playerVars: {
         autoplay: 1,
       },
     };
-
-    let movie = this.state.movie;
-
     return (
-      <div className='movie-details'>
+      <div className='details'>
         <Header
           id={this.props.match.params.id}
           baseUrl={this.props.baseUrl}
           showBookShowButton='true'
         />
-        <div className='back-to-home'>
+        <div className='back'>
           <Typography>
             <Link to='/'> &#60; Back to Home</Link>
           </Typography>
@@ -163,7 +158,7 @@ class Details extends Component {
               </Typography>
               <YouTube
                 videoId={movie.trailer_url.split('?v=')[1]}
-                opts={options}
+                opts={opts}
                 onReady={this._onReady}
               />
             </div>
@@ -177,7 +172,7 @@ class Details extends Component {
               <StarBorderIcon
                 className={star.color}
                 key={'star' + star.id}
-                onClick={() => this.onClickStars(star.id)}
+                onClick={() => this.starClickHandler(star.id)}
               />
             ))}
 
@@ -192,20 +187,18 @@ class Details extends Component {
                 cols={2}
               >
                 {movie.artists != null &&
-                  movie.artists.map((eachArtist) => (
+                  movie.artists.map((artist) => (
                     <GridListTile
                       className='gridTile'
-                      onClick={() => this.onClickArtist(eachArtist.wiki_url)}
-                      key={eachArtist.id}
+                      onClick={() => this.artistClickHandler(artist.wiki_url)}
+                      key={artist.id}
                     >
                       <img
-                        src={eachArtist.profile_url}
-                        alt={eachArtist.first_name + ' ' + eachArtist.last_name}
+                        src={artist.profile_url}
+                        alt={artist.first_name + ' ' + artist.last_name}
                       />
                       <GridListTileBar
-                        title={
-                          eachArtist.first_name + ' ' + eachArtist.last_name
-                        }
+                        title={artist.first_name + ' ' + artist.last_name}
                       />
                     </GridListTile>
                   ))}
