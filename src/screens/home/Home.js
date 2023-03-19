@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import './Home.css';
 import Header from '../../common/header/Header';
-import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -20,8 +20,8 @@ import Button from '@material-ui/core/Button';
 
 const styles = (theme) => ({
   root: {
-    flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+    flexGrow: 1,
   },
   upcomingMoviesHeading: {
     textAlign: 'center',
@@ -30,21 +30,21 @@ const styles = (theme) => ({
     fontSize: '1rem',
   },
   gridListUpcomingMovies: {
-    flexWrap: 'nowrap',
-    transform: 'translateZ(0)',
     width: '100%',
+    transform: 'translateZ(0)',
+    flexWrap: 'nowrap',
   },
   gridListMain: {
-    transform: 'translateZ(0)',
     cursor: 'pointer',
+    transform: 'translateZ(0)',
+  },
+  filtersTitle: {
+    color: theme.palette.primary.light,
   },
   formControl: {
-    margin: theme.spacing.unit,
     minWidth: 240,
     maxWidth: 240,
-  },
-  title: {
-    color: theme.palette.primary.light,
+    margin: theme.spacing.unit,
   },
 });
 
@@ -56,8 +56,8 @@ class Home extends Component {
       upcomingMovies: [],
       releasedMovies: [],
       genres: [],
-      artists: [],
       genresList: [],
+      artists: [],
       artistsList: [],
       releaseDateStart: '',
       releaseDateEnd: '',
@@ -65,13 +65,13 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    // Get upcoming movies
+    // fetching upcoming movies from database
     let data = null;
     let xhr = new XMLHttpRequest();
-    let that = this;
+    let currentState = this;
     xhr.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           upcomingMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -81,12 +81,12 @@ class Home extends Component {
     xhr.setRequestHeader('Cache-Control', 'no-cache');
     xhr.send(data);
 
-    // Get released movies
+    // fetching released movies from database
     let dataReleased = null;
     let xhrReleased = new XMLHttpRequest();
     xhrReleased.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           releasedMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -96,12 +96,12 @@ class Home extends Component {
     xhrReleased.setRequestHeader('Cache-Control', 'no-cache');
     xhrReleased.send(dataReleased);
 
-    // Get filters
+    // fetching filters from database
     let dataGenres = null;
     let xhrGenres = new XMLHttpRequest();
     xhrGenres.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           genresList: JSON.parse(this.responseText).genres,
         });
       }
@@ -111,12 +111,12 @@ class Home extends Component {
     xhrGenres.setRequestHeader('Cache-Control', 'no-cache');
     xhrGenres.send(dataGenres);
 
-    // Get artists
+    // fetching artists from database
     let dataArtists = null;
     let xhrArtists = new XMLHttpRequest();
     xhrArtists.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           artistsList: JSON.parse(this.responseText).artists,
         });
       }
@@ -169,12 +169,13 @@ class Home extends Component {
       queryString += '&end_date=' + this.state.releaseDateEnd;
     }
 
-    let that = this;
+    let currentState = this;
     let dataFilter = null;
     let xhrFilter = new XMLHttpRequest();
+
     xhrFilter.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           releasedMovies: JSON.parse(this.responseText).movies,
         });
       }
@@ -203,10 +204,10 @@ class Home extends Component {
           className={classes.gridListUpcomingMovies}
         >
           {this.state.upcomingMovies.map((movie) => (
-            <GridListTile key={'upcoming' + movie.id}>
+            <GridListTile key={'upcoming movie' + movie.id}>
               <img
                 src={movie.poster_url}
-                className='movie-poster'
+                className='released-movie'
                 alt={movie.title}
               />
               <GridListTileBar title={movie.title} />
@@ -215,7 +216,7 @@ class Home extends Component {
         </GridList>
 
         <div className='flex-container'>
-          <div className='left'>
+          <div className='left-container'>
             <GridList
               cellHeight={350}
               cols={4}
@@ -245,12 +246,12 @@ class Home extends Component {
               ))}
             </GridList>
           </div>
-          <div className='right'>
+          <div className='right-container'>
             <Card>
               <CardContent>
                 <FormControl className={classes.formControl}>
                   <Typography
-                    className={classes.title}
+                    className={classes.filtersTitle}
                     color='textSecondary'
                   >
                     FIND MOVIES BY:

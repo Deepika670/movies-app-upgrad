@@ -10,24 +10,20 @@
 }
 
 .left-container {
-  width: 75%;
+  width: 76%;
 }
 
 .right-container {
   width: 24%;
-  padding-top: 23px;
+  padding-top: 20px;
 }
 
 .right-container > div {
-  margin: 17px;
-}
-
-.released-movie {
-  margin: 17px;
+  margin: 16px;
 }
 
 ::-webkit-scrollbar {
-  width: 4.3px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -49,6 +45,10 @@
   width: auto;
 }
 
+.released-movie-grid-item {
+  margin: 15px;
+}
+
 @media (max-width: 992px) {
   .flex-container {
     flex-direction: column;
@@ -62,7 +62,7 @@
     width: 90%;
   }
 
-  .released-movie {
+  .released-movie-grid-item {
     margin: 8px;
   }
 }
