@@ -1,10 +1,17 @@
-import { Typography } from '@material-ui/core';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import Header from '../../common/header/Header';
+import YouTube from 'react-youtube';
 
+import './Details.css';
 class Details extends Component {
   constructor() {
     super();
-
     this.state = {
       movie: {
         genres: [],
@@ -59,93 +66,153 @@ class Details extends Component {
       this.props.baseUrl + 'movies/' + this.props.match.params.id
     );
     xhrMovie.setRequestHeader('Cache-Control', 'no-cache');
-
     xhrMovie.send(movieData);
   }
 
+  onClickArtist = (url) => {
+    window.location = url;
+  };
+
+  onClickStars = (id) => {
+    let starIconList = [];
+
+    for (let star of this.state.starIcons) {
+      let ratingStar = star;
+
+      if (star.id <= id) {
+        ratingStar.color = 'yellow';
+      } else {
+        ratingStar.color = 'black';
+      }
+      starIconList.push(ratingStar);
+    }
+    this.setState({ starIcons: starIconList });
+  };
+
   render() {
+    const options = {
+      height: '300',
+      width: '700',
+      playerVars: {
+        autoplay: 1,
+      },
+    };
+
+    let movie = this.state.movie;
+
     return (
       <div className='movie-details'>
-        <Header />
+        <Header
+          id={this.props.match.params.id}
+          baseUrl={this.props.baseUrl}
+          showBookShowButton='true'
+        />
         <div className='back-to-home'>
           <Typography>
             <Link to='/'> &#60; Back to Home</Link>
           </Typography>
         </div>
-        <section className='movie-full-details-section'>
-          <div className='movie-poster-section'>
+        <div className='flex-containerDetails'>
+          <div className='leftDetails'>
             <img
-              src={''}
-              alt={''}
+              src={movie.poster_url}
+              alt={movie.title}
             />
           </div>
 
-          <div className='movie-full-details'>
+          <div className='middleDetails'>
             <div>
               <Typography
                 variant='headline'
                 component='h2'
-              ></Typography>
+              >
+                {movie.title}{' '}
+              </Typography>
             </div>
-
             <br />
-            <br />
-
             <div>
               <Typography>
-                <span>Genres: </span>
+                <span className='bold'>Genres: </span> {movie.genres.join(', ')}
               </Typography>
             </div>
-
             <div>
               <Typography>
-                <span>Duration: </span>
+                <span className='bold'>Duration:</span> {movie.duration}{' '}
               </Typography>
             </div>
-
             <div>
               <Typography>
-                <span>Release Date: </span>
+                <span className='bold'>Release Date:</span>{' '}
+                {new Date(movie.release_date).toDateString()}{' '}
               </Typography>
             </div>
-
             <div>
               <Typography>
-                <span>Rating: </span>
+                <span className='bold'> Rating:</span> {movie.critics_rating}{' '}
               </Typography>
             </div>
-
-            <div>
+            <div className='marginTop16'>
               <Typography>
-                <span>Plot:</span>
+                <span className='bold'>Plot:</span>{' '}
+                <a href={movie.wiki_url}>(Wiki Link)</a> {movie.storyline}{' '}
               </Typography>
             </div>
-
-            <div>
+            <div className='trailerContainer'>
               <Typography>
-                <span>Trailer:</span>
+                <span className='bold'>Trailer:</span>
               </Typography>
+              <YouTube
+                videoId={movie.trailer_url.split('?v=')[1]}
+                opts={options}
+                onReady={this._onReady}
+              />
             </div>
           </div>
 
-          <div className='rating-movie-artists-container'>
+          <div className='rightDetails'>
             <Typography>
-              <span>Rate this movie: </span>
+              <span className='bold'>Rate this movie: </span>
             </Typography>
+            {this.state.starIcons.map((star) => (
+              <StarBorderIcon
+                className={star.color}
+                key={'star' + star.id}
+                onClick={() => this.onClickStars(star.id)}
+              />
+            ))}
 
-            <div>
+            <div className='bold marginBottom16 marginTop16'>
               <Typography>
-                <span>Artists:</span>
+                <span className='bold'>Artists:</span>
               </Typography>
             </div>
-            <div>
+            <div className='paddingRight'>
               <GridList
                 cellHeight={160}
                 cols={2}
-              ></GridList>
+              >
+                {movie.artists != null &&
+                  movie.artists.map((eachArtist) => (
+                    <GridListTile
+                      className='gridTile'
+                      onClick={() => this.onClickArtist(eachArtist.wiki_url)}
+                      key={eachArtist.id}
+                    >
+                      <img
+                        src={eachArtist.profile_url}
+                        alt={eachArtist.first_name + ' ' + eachArtist.last_name}
+                      />
+                      <GridListTileBar
+                        title={
+                          eachArtist.first_name + ' ' + eachArtist.last_name
+                        }
+                      />
+                    </GridListTile>
+                  ))}
+              </GridList>
             </div>
           </div>
-        </section>
+        </div>
       </div>
     );
   }
