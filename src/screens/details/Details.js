@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import Header from '../../common/header/Header';
+import { Link } from 'react-router-dom';
+
 import Typography from '@material-ui/core/Typography';
-import './Details.css';
 import YouTube from 'react-youtube';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import { Link } from 'react-router-dom';
 
+import Header from '../../common/header/Header';
+import './Details.css';
 class Details extends Component {
   constructor() {
     super();
@@ -49,12 +50,13 @@ class Details extends Component {
   }
 
   componentWillMount() {
-    let that = this;
+    let currentState = this;
     let dataMovie = null;
     let xhrMovie = new XMLHttpRequest();
+
     xhrMovie.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({
+        currentState.setState({
           movie: JSON.parse(this.responseText),
         });
       }
