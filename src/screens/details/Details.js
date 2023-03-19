@@ -76,6 +76,7 @@ class Details extends Component {
 
   starClickHandler = (id) => {
     let starIconList = [];
+
     for (let star of this.state.starIcons) {
       let starNode = star;
       if (star.id <= id) {
@@ -90,7 +91,7 @@ class Details extends Component {
 
   render() {
     let movie = this.state.movie;
-    const opts = {
+    const options = {
       height: '300',
       width: '700',
       playerVars: {
@@ -98,26 +99,26 @@ class Details extends Component {
       },
     };
     return (
-      <div className='details'>
+      <div className='details-page-container'>
         <Header
           id={this.props.match.params.id}
           baseUrl={this.props.baseUrl}
           showBookShowButton='true'
         />
-        <div className='back'>
+        <div className='back-to-home'>
           <Typography>
             <Link to='/'> &#60; Back to Home</Link>
           </Typography>
         </div>
-        <div className='flex-containerDetails'>
-          <div className='leftDetails'>
+        <div className='movies-and-details-section'>
+          <div className='movie-genre-left'>
             <img
               src={movie.poster_url}
               alt={movie.title}
             />
           </div>
 
-          <div className='middleDetails'>
+          <div className='movie-complete-details'>
             <div>
               <Typography
                 variant='headline'
@@ -129,46 +130,49 @@ class Details extends Component {
             <br />
             <div>
               <Typography>
-                <span className='bold'>Genres: </span> {movie.genres.join(', ')}
+                <span className='movie-options'>Genres: </span>{' '}
+                {movie.genres.join(', ')}
               </Typography>
             </div>
             <div>
               <Typography>
-                <span className='bold'>Duration:</span> {movie.duration}{' '}
+                <span className='movie-options'>Duration:</span>{' '}
+                {movie.duration}{' '}
               </Typography>
             </div>
             <div>
               <Typography>
-                <span className='bold'>Release Date:</span>{' '}
+                <span className='movie-options'>Release Date:</span>{' '}
                 {new Date(movie.release_date).toDateString()}{' '}
               </Typography>
             </div>
             <div>
               <Typography>
-                <span className='bold'> Rating:</span> {movie.critics_rating}{' '}
+                <span className='movie-options'> Rating:</span>{' '}
+                {movie.critics_rating}{' '}
               </Typography>
             </div>
-            <div className='marginTop16'>
+            <div className='plot-and-artist-section'>
               <Typography>
-                <span className='bold'>Plot:</span>{' '}
+                <span className='movie-options'>Plot:</span>{' '}
                 <a href={movie.wiki_url}>(Wiki Link)</a> {movie.storyline}{' '}
               </Typography>
             </div>
-            <div className='trailerContainer'>
+            <div className='trailer-container'>
               <Typography>
-                <span className='bold'>Trailer:</span>
+                <span className='movie-options'>Trailer:</span>
               </Typography>
               <YouTube
                 videoId={movie.trailer_url.split('?v=')[1]}
-                opts={opts}
+                opts={options}
                 onReady={this._onReady}
               />
             </div>
           </div>
 
-          <div className='rightDetails'>
+          <div className='right-details'>
             <Typography>
-              <span className='bold'>Rate this movie: </span>
+              <span className='movie-options'>Rate this movie: </span>
             </Typography>
             {this.state.starIcons.map((star) => (
               <StarBorderIcon
@@ -178,9 +182,9 @@ class Details extends Component {
               />
             ))}
 
-            <div className='bold marginBottom16 marginTop16'>
+            <div className='movie-options artists plot-and-artist-section'>
               <Typography>
-                <span className='bold'>Artists:</span>
+                <span className='movie-options'>Artists:</span>
               </Typography>
             </div>
             <div className='paddingRight'>

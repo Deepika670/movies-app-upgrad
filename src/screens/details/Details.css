@@ -1,0 +1,97 @@
+.details-page-container {
+  text-align: left;
+}
+
+.back-to-home {
+  height: 24px;
+  margin-top: 8px;
+  margin-left: 24px;
+  margin-bottom: 0px;
+  cursor: pointer;
+}
+
+.movies-and-details-section {
+  display: flex;
+}
+
+.movie-genre-left {
+  text-align: center;
+  width: 20%;
+}
+
+.movie-complete-details {
+  width: 60%;
+}
+
+.movie-options {
+  font-weight: bold;
+}
+
+.plot-and-artists-section {
+  margin-top: 16px;
+}
+
+.artists {
+  margin-bottom: 16px;
+}
+
+.right-details {
+  width: 20%;
+}
+
+.yellow {
+  color: yellow;
+  cursor: pointer;
+}
+
+.centerAlign {
+  text-align: center;
+}
+
+.movies-and-details-section > div {
+  margin: 0px 16px;
+}
+
+.black {
+  color: none;
+  cursor: pointer;
+}
+
+.movie-complete-details {
+  width: 60%;
+}
+
+.trailer-container {
+  margin: 16px 0px 16px 0px !important;
+}
+
+iframe {
+  width: 100% !important;
+}
+
+.gridTile {
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .paddingRight {
+    margin-right: 32px;
+  }
+
+  .movie-genre-left {
+    text-align: center;
+    width: 100%;
+  }
+
+  .movie-complete-details {
+    width: 90%;
+  }
+
+  .right-details {
+    width: 100%;
+  }
+
+  .movies-and-details-section {
+    flex-direction: column;
+  }
+}
