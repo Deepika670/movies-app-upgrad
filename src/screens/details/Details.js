@@ -41,6 +41,28 @@ class Details extends Component {
     };
   }
 
+  componentWillMount() {
+    let currentState = this;
+    let movieData = null;
+    let xhrMovie = new XMLHttpRequest();
+
+    xhrMovie.addEventListener('readystatechange', function () {
+      if (this.readyState === 4) {
+        currentState.setState({
+          movie: JSON.parse(this.responseText),
+        });
+      }
+    });
+
+    xhrMovie.open(
+      'GET',
+      this.props.baseUrl + 'movies/' + this.props.match.params.id
+    );
+    xhrMovie.setRequestHeader('Cache-Control', 'no-cache');
+
+    xhrMovie.send(movieData);
+  }
+
   render() {
     return (
       <div className='movie-details'>
